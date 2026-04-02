@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Daily Status Report — Alex E. Daley Creative</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F4F8F8;
+    --cream-dark: #E4EFEE;
+    --ink: #0D1414;
+    --ink-mid: #334040;
+    --ink-light: #6B8585;
+    --gold: #1A9E8F;
+    --gold-light: #3BBFB0;
+    --gold-faint: #E0F4F2;
+    --border: rgba(13,20,20,0.12);
+    --border-strong: rgba(13,20,20,0.22);
+    --radius: 6px;
+    --radius-lg: 12px;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem 5rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(26,158,143,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 10% 90%, rgba(26,158,143,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .brand-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 1.25rem;
+  }
+
+  .brand-line::before,
+  .brand-line::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  .brand-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--ink-light);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  /* Card */
+  .card {
+    background: #fff;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.6s ease both;
+    box-shadow: 0 1px 3px rgba(28,26,23,0.04), 0 4px 16px rgba(28,26,23,0.04);
+  }
+
+  .card:nth-child(2) { animation-delay: 0.08s; }
+  .card:nth-child(3) { animation-delay: 0.14s; }
+  .card:nth-child(4) { animation-delay: 0.20s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gold-faint);
+    border: 0.5px solid var(--gold-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  /* Fields */
+  .field { margin-bottom: 1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink-light);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--cream);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none;
+    line-height: 1.6;
+  }
+
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  textarea:focus {
+    border-color: var(--gold);
+    background: #fff;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: var(--ink-light);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .row2 {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+  }
+
+  /* Status select */
+  .status-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .status-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border-strong);
+    background: var(--cream);
+    color: var(--ink-mid);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+  }
+
+  .status-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .status-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #fff;
+  }
+
+  /* Preview */
+  .preview-card {
+    background: var(--ink);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    animation: fadeUp 0.6s ease 0.26s both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .preview-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(ellipse at top right, rgba(26,158,143,0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .preview-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preview-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--gold);
+    opacity: 0.3;
+  }
+
+  #preview-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: rgba(247,244,239,0.9);
+    white-space: pre-wrap;
+    min-height: 80px;
+  }
+
+  #preview-text .preview-heading {
+    font-weight: 500;
+    color: var(--gold-light);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s ease 0.32s both;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.01em;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #fff;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    background: transparent;
+    color: rgba(247,244,239,0.6);
+    border: 0.5px solid rgba(247,244,239,0.2);
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(247,244,239,0.5);
+    color: rgba(247,244,239,0.9);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-light);
+    border: 0.5px solid var(--border-strong);
+  }
+
+  .btn-ghost:hover { color: var(--ink); border-color: var(--ink-mid); }
+
+  .copied-msg {
+    font-size: 13px;
+    color: var(--gold-light);
+    align-self: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-style: italic;
+  }
+
+  .copied-msg.show { opacity: 1; }
+
+  /* History */
+  .history-section {
+    margin-top: 2rem;
+    animation: fadeUp 0.6s ease 0.38s both;
+  }
+
+  .history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .history-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .history-clear {
+    font-size: 11px;
+    color: var(--ink-light);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    opacity: 0.6;
+  }
+
+  .history-clear:hover { opacity: 1; }
+
+  .history-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .history-item {
+    background: #fff;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color 0.18s;
+  }
+
+  .history-item:hover { border-color: var(--gold); }
+
+  .history-item-left { flex: 1; min-width: 0; }
+
+  .history-date {
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 2px;
+    letter-spacing: 0.04em;
+  }
+
+  .history-project {
+    font-size: 13px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .history-copy {
+    font-size: 11px;
+    color: var(--ink-light);
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .history-copy:hover { border-color: var(--gold); color: var(--gold); }
+
+  .empty-history {
+    font-size: 13px;
+    color: var(--ink-light);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 12px;
+    color: var(--ink-light);
+    opacity: 0.6;
+    animation: fadeUp 0.6s ease 0.42s both;
+  }
+
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 520px) {
+    body { padding: 2rem 1rem 4rem; }
+    .card, .preview-card { padding: 1.5rem; }
+    .row2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand-line">
+      <span class="brand-text">Alex E. Daley Creative</span>
+    </div>
+    <h1>Daily Status <em>Report</em></h1>
+    <p class="subtitle">Fill in, copy, and send — done in under a minute.</p>
+  </header>
+
+  <!-- Project Info -->
+  <div class="card">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <span class="section-title">Project &amp; Date</span>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Client / Project</label>
+        <input type="text" id="client" placeholder="e.g. AbbVie – AI Cert" />
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="date" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Overall status</label>
+      <div class="status-row">
+        <button class="status-btn active" data-status="On track">On track</button>
+        <button class="status-btn" data-status="Needs attention">Needs attention</button>
+        <button class="status-btn" data-status="Blocked">Blocked</button>
+        <button class="status-btn" data-status="Ahead of schedule">Ahead of schedule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work Update -->
+  <div class="card">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <span class="section-title">Today's Update</span>
+    </div>
+    <div class="field">
+      <label>Completed today</label>
+      <textarea id="done" rows="3" placeholder="What did you finish or deliver?"></textarea>
+    </div>
+    <div class="field">
+      <label>In progress / up next</label>
+      <textarea id="next" rows="3" placeholder="What are you actively working on or tackling next?"></textarea>
+    </div>
+    <div class="field">
+      <label>Needs from client <span style="font-weight:300; text-transform:none; letter-spacing:0;">(leave blank if none)</span></label>
+      <textarea id="blockers" rows="2" placeholder="Feedback, approvals, assets, or decisions needed?"></textarea>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div class="preview-card">
+    <div class="preview-label">Preview</div>
+    <div id="preview-text">Fill in the fields above to preview your report.</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="copyReport()">Copy to clipboard</button>
+      <button class="btn btn-secondary" onclick="saveToHistory()">Save to history</button>
+      <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+      <span class="copied-msg" id="copied-msg">Copied!</span>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="history-section">
+    <div class="history-header">
+      <span class="history-title">Saved reports</span>
+      <button class="history-clear" onclick="clearHistory()">Clear all</button>
+    </div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+
+  <footer>
+    <a href="https://www.alexedaleycreative.com" target="_blank">alexedaleycreative.com</a>
+    &nbsp;·&nbsp; info@alexedaleycreative.com &nbsp;·&nbsp; (847) 224-1726
+  </footer>
+</div>
+
+<script>
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function today() {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  function fmtDate(d) {
+    if (!d) return '';
+    const [y, m, day] = d.split('-');
+    return `${MONTHS[parseInt(m)-1]} ${parseInt(day)}, ${y}`;
+  }
+
+  // Init date
+  document.getElementById('date').value = today();
+
+  // Status buttons
+  let selectedStatus = 'On track';
+  document.querySelectorAll('.status-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedStatus = btn.dataset.status;
+      buildPreview();
+    });
+  });
+
+  // Live preview
+  ['client','date','done','next','blockers'].forEach(id =>
+    document.getElementById(id).addEventListener('input', buildPreview)
+  );
+
+  function buildPreview() {
+    const client   = document.getElementById('client').value.trim();
+    const date     = document.getElementById('date').value;
+    const done     = document.getElementById('done').value.trim();
+    const next     = document.getElementById('next').value.trim();
+    const blockers = document.getElementById('blockers').value.trim();
+    const preview  = document.getElementById('preview-text');
+
+    if (!client && !done && !next) {
+      preview.innerHTML = '<span style="color:rgba(247,244,239,0.35);font-style:italic;">Fill in the fields above to preview your report.</span>';
+      return;
+    }
+
+    const lines = [];
+    if (client || date) {
+      lines.push(`<span class="preview-heading">Project</span>`);
+      lines.push(`${client || '—'}${date ? '  ·  ' + fmtDate(date) : ''}`);
+      lines.push(`Status: ${selectedStatus}`);
+      lines.push('');
+    }
+    if (done) {
+      lines.push(`<span class="preview-heading">Completed today</span>`);
+      lines.push(done);
+      lines.push('');
+    }
+    if (next) {
+      lines.push(`<span class="preview-heading">In progress / up next</span>`);
+      lines.push(next);
+      lines.push('');
+    }
+    if (blockers) {
+      lines.push(`<span class="preview-heading">Needs from you</span>`);
+      lines.push(blockers);
+      lines.push('');
+    }
+    lines.push(`<span style="color:rgba(247,244,239,0.4);font-size:12px;">— Alex Daley  |  info@alexedaleycreative.com  |  (847) 224-1726  |  alexedaleycreative.com</span>`);
+    preview.innerHTML = lines.join('\n');
+  }
+
+  function getPlainText() {
+    const client   = document.getElementById('client').value.trim();
+    const date     = document.getElementById('date').value;
+    const done     = document.getElementById('done').value.trim();
+    const next     = document.getElementById('next').value.trim();
+    const blockers = document.getElementById('blockers').value.trim();
+
+    const lines = [];
+    if (client || date) {
+      lines.push('PROJECT');
+      lines.push(`${client || '—'}${date ? '  ·  ' + fmtDate(date) : ''}`);
+      lines.push(`Status: ${selectedStatus}`);
+      lines.push('');
+    }
+    if (done) { lines.push('COMPLETED TODAY'); lines.push(done); lines.push(''); }
+    if (next) { lines.push('IN PROGRESS / UP NEXT'); lines.push(next); lines.push(''); }
+    if (blockers) { lines.push('NEEDS FROM YOU'); lines.push(blockers); lines.push(''); }
+    lines.push('— Alex Daley  |  info@alexedaleycreative.com  |  (847) 224-1726  |  alexedaleycreative.com');
+    return lines.join('\n').trim();
+  }
+
+  function copyReport() {
+    const text = getPlainText();
+    if (!text.includes('PROJECT') && !text.includes('COMPLETED')) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const msg = document.getElementById('copied-msg');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 2500);
+    });
+  }
+
+  function clearAll() {
+    ['client','done','next','blockers'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('date').value = today();
+    selectedStatus = 'On track';
+    document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-status="On track"]').classList.add('active');
+    buildPreview();
+  }
+
+  // History (localStorage)
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem('aed_reports') || '[]'); } catch { return []; }
+  }
+
+  function saveHistory(h) {
+    localStorage.setItem('aed_reports', JSON.stringify(h));
+  }
+
+  function saveToHistory() {
+    const client = document.getElementById('client').value.trim();
+    const date   = document.getElementById('date').value;
+    const text   = getPlainText();
+    if (!client && !text.includes('COMPLETED')) return;
+
+    const h = getHistory();
+    h.unshift({ id: Date.now(), client: client || 'Untitled', date, status: selectedStatus, text });
+    if (h.length > 20) h.pop();
+    saveHistory(h);
+    renderHistory();
+
+    const msg = document.getElementById('copied-msg');
+    msg.textContent = 'Saved!';
+    msg.classList.add('show');
+    setTimeout(() => { msg.classList.remove('show'); msg.textContent = 'Copied!'; }, 2000);
+  }
+
+  function renderHistory() {
+    const h = getHistory();
+    const list = document.getElementById('history-list');
+    if (!h.length) {
+      list.innerHTML = '<p class="empty-history">No saved reports yet.</p>';
+      return;
+    }
+    list.innerHTML = h.map(item => `
+      <div class="history-item" onclick="loadItem(${item.id})">
+        <div class="history-item-left">
+          <div class="history-date">${fmtDate(item.date) || 'No date'} &nbsp;·&nbsp; ${item.status}</div>
+          <div class="history-project">${item.client}</div>
+        </div>
+        <button class="history-copy" onclick="event.stopPropagation(); copyItem(${item.id})">Copy</button>
+      </div>
+    `).join('');
+  }
+
+  function loadItem(id) {
+    const item = getHistory().find(h => h.id === id);
+    if (!item) return;
+    // parse back
+    const lines = item.text.split('\n');
+    // just reload fields from stored data — easier to store separately
+    // For simplicity, just copy the text
+    navigator.clipboard.writeText(item.text).then(() => {
+      const msg = document.getElementById('copied-msg');
+      msg.textContent = 'Report copied!';
+      msg.classList.add('show');
+      setTimeout(() => { msg.classList.remove('show'); msg.textContent = 'Copied!'; }, 2500);
+    });
+  }
+
+  function copyItem(id) {
+    const item = getHistory().find(h => h.id === id);
+    if (!item) return;
+    navigator.clipboard.writeText(item.text);
+  }
+
+  function clearHistory() {
+    if (!confirm('Clear all saved reports?')) return;
+    localStorage.removeItem('aed_reports');
+    renderHistory();
+  }
+
+  // Init
+  buildPreview();
+  renderHistory();
+</script>
+</body>
+</html>
